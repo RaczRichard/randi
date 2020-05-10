@@ -8,7 +8,6 @@ use Monolog\Logger;
 use Randi\domain\base\controller\BaseController;
 use Randi\domain\user\entity\LoginRequest;
 use Randi\domain\user\entity\RegisterRequest;
-use Randi\domain\user\entity\User;
 use Randi\domain\user\service\validator\Validator;
 use Randi\modules\RequestHandler;
 
@@ -24,8 +23,7 @@ class AuthController extends BaseController
 
     public function loginAction()
     {
-        $_POST = json_decode(file_get_contents('php://input'), true);
-        $this->log->info("dafaq : ".json_encode($_POST));
+        $_POST = json_decode(file_get_contents('php://input'), true); // postnál elengedhetettlen
         $email = RequestHandler::postParam('email') ?: '';
         $password = RequestHandler::postParam('password') ?: '';
 

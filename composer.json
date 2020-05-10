@@ -3,9 +3,7 @@
     "vlucas/phpdotenv": "^2.4",
     "nesbot/carbon": "^2.33",
     "monolog/monolog": "^2.0",
-    "ext-json": "*",
-    "ext-http": "*",
-    "ext-apache": "*"
+    "ext-json": "*"
   },
   "autoload": {
     "psr-4": {

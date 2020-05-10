@@ -29,20 +29,22 @@ class AuthService extends BaseService
         $this->jsonMapper = new Mapper();
         $this->token = $this->getToken();
         $this->log = new Logger('AuthService.php');
-        $this->log->pushHandler(new StreamHandler($GLOBALS['rootDir'].'/randi.log', Logger::DEBUG));
+        $this->log->pushHandler(new StreamHandler($GLOBALS['rootDir'] . '/randi.log', Logger::DEBUG));
     }
 
-    private function getToken() : ? Token {
+    private function getToken(): ?Token
+    {
         $headers = apache_request_headers();
         $jwt = $headers['Authorization'];
-        if(isset($jwt) && strlen($jwt) > 6){
-            $jwt = substr($jwt,6);
+        if (isset($jwt) && strlen($jwt) > 6) {
+            $jwt = substr($jwt, 6);
             return $this->jwtHandler->parseJwt($jwt);
         }
         return null;
     }
 
-    public function getRole(){
+    public function getRole()
+    {
         $stmt = $this->db->prepare("select role.code from user inner join role on user.roleId = role.id where user.id=:id");
 
         $stmt->execute([
@@ -53,7 +55,8 @@ class AuthService extends BaseService
         return $role;
     }
 
-    public function registerUser(RegisterRequest $request){
+    public function registerUser(RegisterRequest $request)
+    {
 
         $this->log->debug(json_encode($request));
 
@@ -64,7 +67,7 @@ class AuthService extends BaseService
             "password" => $request->getPassword(),
         ]);
 
-        if(!$success){
+        if (!$success) {
             $this->log->error("couldn't register user");
         }
     }
@@ -73,7 +76,8 @@ class AuthService extends BaseService
      * @param LoginRequest $request
      * @return LoginResponse
      */
-    public function login(LoginRequest $request) : ? LoginResponse{
+    public function login(LoginRequest $request): ?LoginResponse
+    {
         $stmt = $this->db->prepare("select * from user where email=:email and password=:password");
 
         $stmt->execute([
@@ -83,32 +87,30 @@ class AuthService extends BaseService
 
         $userData = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        if(isset($userData) && $userData){
+        if (isset($userData) && $userData) {
             $this->log->debug(json_encode($userData));
-        }else{
+        } else {
             $this->log->error("invalid username and password!");
         }
 
-        if(!$userData){
+        if (!$userData) {
             return null;
         }
 
         $mapper = new Mapper();
         /** @var User $user */
-        $user = $mapper->classFromArray($userData,new User());
+        $user = $mapper->classFromArray($userData, new User());
         $token = new Token();
         $token->name = $user->email;
         $token->id = $user->id;
-        $token->exp =  time() + (3600);
+        $token->exp = time() + (3600);
         $jwt = $this->jwtHandler->generateJwt($token);
-
         $response = new LoginResponse();
         $response->id = $user->id;
         $response->name = $user->email;
         $response->token = $jwt;
         return $response;
     }
-
 
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-function base64UrlEncode($text)
+function base64UrlEncode($text) // url friendly
 {
     return str_replace(
         ['+', '/', '='],
@@ -16,7 +16,8 @@ function dd($object){
     die();
 }
 
-function cors() {
+function cors()
+{ // stack-overflow
 
     header('Content-Type: application/json');
     // Allow from any origin
