@@ -7,6 +7,8 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Randi\domain\base\service\BaseService;
 use Randi\domain\user\entity\ProfileResponse;
+use Randi\domain\user\entity\Token;
+use Randi\domain\user\entity\User;
 use Randi\modules\Mapper;
 
 class ProfileService extends BaseService
@@ -25,18 +27,19 @@ class ProfileService extends BaseService
      */
     public function listSetting(): array //PROFIL LISTÁZÁSA
     {
-        $stmt = $this->db->prepare("select * from profile");
-        $stmt->execute();
+        $user = new User();
+        $userId = $user->id;
+        $stmt = $this->db->prepare("select * from profile WHERE id=:1");
+//        $stmt->execute();
         $ProfileData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-        $profile = [];
+        $profiles = [];
 
         $mapper = new Mapper();
         foreach ($ProfileData as $profile) {
-            $profile[] = $mapper->classFromArray($profile, new ProfileResponse());
+            $profiles[] = $mapper->classFromArray($profile, new ProfileResponse());
         }
-
-        return $profile;
+        dd($user);
+        return $profiles;
     }
 
 }

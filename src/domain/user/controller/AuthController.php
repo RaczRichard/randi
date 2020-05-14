@@ -7,7 +7,6 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Randi\domain\base\controller\BaseController;
 use Randi\domain\user\entity\LoginRequest;
-use Randi\domain\user\entity\ProfileRequest;
 use Randi\domain\user\entity\RegisterRequest;
 use Randi\domain\user\service\validator\Validator;
 use Randi\modules\RequestHandler;
@@ -22,6 +21,9 @@ class AuthController extends BaseController
         $this->log->pushHandler(new StreamHandler($GLOBALS['rootDir'].'/randi.log', Logger::DEBUG));
     }
 
+    /**
+     * http://randi/login/login
+     */
     public function loginAction()
     {
         $_POST = json_decode(file_get_contents('php://input'), true); // postnál elengedhetettlen
@@ -47,6 +49,9 @@ class AuthController extends BaseController
         }
     }
 
+    /**
+     * http://randi/registration/save
+     */
     public function registerAction()
     {
         $_POST = json_decode(file_get_contents('php://input'), true);

@@ -18,7 +18,7 @@ use Randi\modules\JwtHandler;
 class AuthService extends BaseService
 {
 
-    private $jwtHandler;
+    protected $jwtHandler;
     private $jsonMapper;
     private $token;
 
@@ -32,28 +32,14 @@ class AuthService extends BaseService
         $this->log->pushHandler(new StreamHandler($GLOBALS['rootDir'] . '/randi.log', Logger::DEBUG));
     }
 
-    private function getToken(): ?Token
-    {
-        $headers = apache_request_headers();
-        if (isset($headers['Authorization'])) {
-            $jwt = $headers['Authorization'];
-            if (isset($jwt) && strlen($jwt) > 6) {
-                $jwt = substr($jwt, 6);
-                return $this->jwtHandler->parseJwt($jwt);
-            }
-        }
-        return null;
-    }
 
     public function getRole()
     {
         if (isset($this->token)) {
             $stmt = $this->db->prepare("select role.code from user inner join role on user.roleId = role.id where user.id=:id");
-
             $stmt->execute([
                 "id" => $this->token->id
             ]);
-
             $role = $stmt->fetch(\PDO::FETCH_COLUMN);
             return $role;
         }
@@ -64,16 +50,14 @@ class AuthService extends BaseService
     public function registerUser(RegisterRequest $request)
     {
 
-
         $this->log->debug(json_encode($request));
 
         $stmt = $this->db->prepare("insert into profile (status) values (:status)");
         $stmt->execute([
-            'status' => 1
+            'status' => 1,
         ]);
+
         $profileId = $this->db->lastInsertId();
-
-
         $stmt = $this->db->prepare("insert into user (email, password, profileId) values (:email, :password, :profileId)");
         $success = $stmt->execute([
             "email" => $request->getEmail(),
@@ -84,8 +68,11 @@ class AuthService extends BaseService
         if (!$success) {
             $this->log->error("couldn't register user");
         }
-
-
+        $usernameSetter = "Névtelen " . $profileId;
+        $stmt = $this->db->prepare("update profile set username = '$usernameSetter' where id=:id");
+        $stmt->execute(array(
+            "id" => $profileId
+        ));
     }
 
     /**

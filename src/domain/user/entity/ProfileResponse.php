@@ -6,12 +6,14 @@ namespace Randi\domain\user\entity;
 class ProfileResponse
 {
     public $username;
-    public $age;
     public $address;
-    public $looking;
-    public $weight;
     public $height;
-    public $live;
+    public $weight;
+    public $age;
     public $child;
+    public $job;
+    public $live;
+    public $looking;
     public $school;
+    public $status;
 }

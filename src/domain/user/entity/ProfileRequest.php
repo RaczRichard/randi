@@ -17,7 +17,7 @@ class ProfileRequest
     private $height;
 
     /** @var int */
-    private $weigth;
+    private $weight;
 
     /** @var int */
     private $age;
@@ -36,6 +36,9 @@ class ProfileRequest
 
     /** @var string */
     private $school;
+
+    /** @var int */
+    private $status;
 
     /**
      * @return string
@@ -196,6 +199,22 @@ class ProfileRequest
     public function setSchool(string $school): void
     {
         $this->school = $school;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     */
+    public function setStatus(int $status): void
+    {
+        $this->status = $status;
     }
 
 }

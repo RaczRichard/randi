@@ -12,11 +12,11 @@ use Randi\domain\user\service\ProfileService;
 
 class ProfileController extends BaseController
 {
-    private $ProfileService;
+    private $profileService;
     public function __construct()
     {
         parent::__construct();
-        $this->ProfileService = new ProfileService();
+        $this->profileService = new ProfileService();
         $this->log = new Logger('ProfileController.php');
         $this->log->pushHandler(new StreamHandler($GLOBALS['rootDir'] . '/randi.log', Logger::DEBUG));
     }
@@ -35,7 +35,7 @@ class ProfileController extends BaseController
     public function getAction()
     {
         if ($this->hasRole(["admin", "user"])) {
-            $this->returnJson($this->ProfileService->listSetting());
+            $this->returnJson($this->profileService->listSetting());
         }
     }
 }
