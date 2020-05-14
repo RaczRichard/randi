@@ -19,6 +19,7 @@ class Validator
         }
 
         return true;
+
     }
 
     public static function validateLogin(LoginRequest $request) : bool {

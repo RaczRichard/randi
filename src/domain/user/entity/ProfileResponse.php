@@ -1,17 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Én
- * Date: 2020. 05. 11.
- * Time: 2:35
- */
 
 namespace Randi\domain\user\entity;
 
 
-class Profile
+class ProfileResponse
 {
-    public $name;
+    public $username;
     public $age;
     public $address;
     public $looking;

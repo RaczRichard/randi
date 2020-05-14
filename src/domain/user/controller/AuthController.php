@@ -7,6 +7,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Randi\domain\base\controller\BaseController;
 use Randi\domain\user\entity\LoginRequest;
+use Randi\domain\user\entity\ProfileRequest;
 use Randi\domain\user\entity\RegisterRequest;
 use Randi\domain\user\service\validator\Validator;
 use Randi\modules\RequestHandler;
@@ -48,10 +49,12 @@ class AuthController extends BaseController
 
     public function registerAction()
     {
+        $_POST = json_decode(file_get_contents('php://input'), true);
         $email = RequestHandler::postParam('email') ?: '';
         $password = RequestHandler::postParam('password') ?: '';
 
         $request = new RegisterRequest();
+
         $request->setEmail($email);
         $request->setPassword($password);
 

@@ -1,0 +1,201 @@
+<?php
+
+
+namespace Randi\domain\user\entity;
+
+
+class ProfileRequest
+{
+
+    /** @var string */
+    private $username;
+
+    /** @var string */
+    private $address;
+
+    /** @var int */
+    private $height;
+
+    /** @var int */
+    private $weigth;
+
+    /** @var int */
+    private $age;
+
+    /** @var string */
+    private $child;
+
+    /** @var string */
+    private $job;
+
+    /** @var string */
+    private $live;
+
+    /** @var string */
+    private $looking;
+
+    /** @var string */
+    private $school;
+
+    /**
+     * @return string
+     */
+    public function getUsername(): string
+    {
+
+        return $this->username;
+    }
+
+    /**
+     * @param string $username
+     */
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     */
+    public function setAddress(string $address): void
+    {
+        $this->address = $address;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHeight(): int
+    {
+        return $this->height;
+    }
+
+    /**
+     * @param int $height
+     */
+    public function setHeight(int $height): void
+    {
+        $this->height = $height;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWeight(): int
+    {
+        return $this->weigth;
+    }
+
+    /**
+     * @param int $weight
+     */
+    public function setWeight(int $weight): void
+    {
+        $this->weight = $weight;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAge(): int
+    {
+        return $this->age;
+    }
+
+    /**
+     * @param int $age
+     */
+    public function setAge(int $age): void
+    {
+        $this->age = $age;
+    }
+
+    /**
+     * @return string
+     */
+    public function getChild(): string
+    {
+        return $this->child;
+    }
+
+    /**
+     * @param string $child
+     */
+    public function setChild(string $child): void
+    {
+        $this->child = $child;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJob(): string
+    {
+        return $this->job;
+    }
+
+    /**
+     * @param string $job
+     */
+    public function setJob(string $job): void
+    {
+        $this->job = $job;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLive(): string
+    {
+        return $this->live;
+    }
+
+    /**
+     * @param string $live
+     */
+    public function setLive(string $live): void
+    {
+        $this->live = $live;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLooking(): string
+    {
+        return $this->looking;
+    }
+
+    /**
+     * @param string $looking
+     */
+    public function setLooking(string $looking): void
+    {
+        $this->looking = $looking;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSchool(): string
+    {
+        return $this->school;
+    }
+
+    /**
+     * @param string $school
+     */
+    public function setSchool(string $school): void
+    {
+        $this->school = $school;
+    }
+
+}
