@@ -16,6 +16,14 @@ function dd($object){
     die();
 }
 
+function ddj($object)
+{
+    echo "<pre>";
+    var_dump(json_encode($object));
+    echo "</pre>";
+    die();
+}
+
 function cors()
 { // stack-overflow
 

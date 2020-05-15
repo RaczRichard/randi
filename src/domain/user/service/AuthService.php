@@ -69,11 +69,6 @@ class AuthService extends BaseService
         if (!$success) {
             $this->log->error("couldn't register user");
         }
-        $usernameSetter = "Névtelen " . $profileId;
-        $stmt = $this->db->prepare("update profile set username = '$usernameSetter' where id=:id");
-        $stmt->execute(array(
-            "id" => $profileId
-        ));
     }
 
     /**

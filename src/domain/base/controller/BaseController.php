@@ -27,6 +27,8 @@ class BaseController
    }
 
    protected function returnJson($data){
+       $this->log->debug("return json " . json_encode($data));
         echo json_encode($data);
+
    }
 }

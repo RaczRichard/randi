@@ -3,7 +3,7 @@
 namespace Randi\domain\user\entity;
 
 
-class ProfileResponse
+class Profile
 {
     public $id;
     public $username;

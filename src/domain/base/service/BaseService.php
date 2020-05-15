@@ -9,7 +9,9 @@ use Monolog\Logger;
 use Randi\config\Database;
 use Randi\domain\user\entity\Token;
 use Randi\domain\user\entity\User;
+use Randi\domain\user\entity\UserRequest;
 use Randi\modules\JwtHandler;
+use Randi\modules\Mapper;
 
 class BaseService
 {
@@ -41,19 +43,25 @@ class BaseService
     }
 
 
-    protected function getUser(): ?User
+    /**
+     * @return User
+     */
+    protected function getUser(): User // USER TÁBLA KIKÉRÉSE
     {
         $token = $this->getToken();
         $userId = $token->id;
-        $anyad = "kurva anyád";
-//        if (isset($token)) {
-        $stmt = $this->db->prepare("select * from user where id=:id");
+        if (isset($token)) {
+            $stmt = $this->db->prepare("select * from user where id=:id");
             $stmt->execute([
-                "id" => $userId
+                "id" => $userId,
             ]);
-        $userData = $stmt->fetch(\PDO::FETCH_ASSOC);
-        return $userId;
-//        }
-//        return $userData2;
+            $userData = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            $mapper = new Mapper();
+            /** @var User $users */
+            $user = $mapper->classFromArray($userData, new User());
+            return $user;
+        }
+        return null;
     }
 }

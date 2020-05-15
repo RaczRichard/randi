@@ -7,7 +7,9 @@ namespace Randi\domain\user\controller;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Randi\domain\base\controller\BaseController;
+use Randi\domain\user\entity\Profile;
 use Randi\domain\user\service\ProfileService;
+use Randi\modules\RequestHandler;
 
 
 class ProfileController extends BaseController
@@ -26,7 +28,23 @@ class ProfileController extends BaseController
      */
     public function saveAction()
     {
-
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        $profile = new Profile();
+        $profile->id = RequestHandler::postParam('id') ?: '';
+        $profile->username = RequestHandler::postParam('username') ?: '';
+        $profile->address = RequestHandler::postParam('address') ?: '';
+        $profile->height = RequestHandler::postParam('height') ?: '';
+        $profile->weight = RequestHandler::postParam('weight') ?: '';
+        $profile->age = RequestHandler::postParam('age') ?: '';
+        $profile->child = RequestHandler::postParam('child') ?: '';
+        $profile->job = RequestHandler::postParam('job') ?: '';
+        $profile->live = RequestHandler::postParam('live') ?: '';
+        $profile->looking = RequestHandler::postParam('looking') ?: '';
+        $profile->school = RequestHandler::postParam('school') ?: '';
+        $profile->status = RequestHandler::postParam('status') ?: '';
+        if ($this->hasRole(["admin", "user"])) {
+            $this->returnJson($this->profileService->changeSetting($profile));
+        }
     }
 
     /**
