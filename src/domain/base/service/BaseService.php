@@ -9,6 +9,7 @@ use Monolog\Logger;
 use Randi\config\Database;
 use Randi\domain\user\entity\Token;
 use Randi\domain\user\entity\User;
+use Randi\modules\JwtHandler;
 
 class BaseService
 {
@@ -22,6 +23,7 @@ class BaseService
     {
         $this->db = new Database();
         $this->log = new Logger('BaseService.php');
+        $this->jwtHandler = new JwtHandler();
         $this->log->pushHandler(new StreamHandler($GLOBALS['rootDir'] . '/randi.log', Logger::DEBUG));
     }
 
@@ -38,19 +40,20 @@ class BaseService
         return null;
     }
 
-    protected function getUser(): User
+
+    protected function getUser(): ?User
     {
         $token = $this->getToken();
-        echo "<script>console.log('token " . $token . "' );</script>";
-        if (isset($token)) {
-            $stmt = $this->db->prepare("select * from profile where id=:tokenId");
+        $userId = $token->id;
+        $anyad = "kurva anyád";
+//        if (isset($token)) {
+        $stmt = $this->db->prepare("select * from user where id=:id");
             $stmt->execute([
-                "tokenId" => $token->id
+                "id" => $userId
             ]);
-
-            $userData = $stmt->fetch(\PDO::FETCH_COLUMN);
-            return $userData;
-        }
-        return null;
+        $userData = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $userId;
+//        }
+//        return $userData2;
     }
 }

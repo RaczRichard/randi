@@ -38,4 +38,5 @@ class ProfileController extends BaseController
             $this->returnJson($this->profileService->listSetting());
         }
     }
+
 }

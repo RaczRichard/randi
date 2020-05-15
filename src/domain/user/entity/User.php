@@ -10,4 +10,5 @@ class User
     public $email;
     public $password;
     public $roleId;
+    public $profileId;
 }

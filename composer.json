@@ -5,7 +5,8 @@
     "monolog/monolog": "^2.0",
     "ext-json": "*",
     "ext-http": "*",
-    "ext-apache": "*"
+    "ext-apache": "*",
+    "ext-pdo": "*"
   },
   "autoload": {
     "psr-4": {

@@ -7,13 +7,11 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Randi\domain\base\service\BaseService;
 use Randi\domain\user\entity\ProfileResponse;
-use Randi\domain\user\entity\Token;
-use Randi\domain\user\entity\User;
 use Randi\modules\Mapper;
+
 
 class ProfileService extends BaseService
 {
-
 
     public function __construct()
     {
@@ -22,24 +20,32 @@ class ProfileService extends BaseService
         $this->log->pushHandler(new StreamHandler($GLOBALS['rootDir'] . '/randi.log', Logger::DEBUG));
     }
 
+
     /**
-     * @return ProfileResponse[]
+     * @return ProfileResponse
      */
-    public function listSetting(): array //PROFIL LISTÁZÁSA
+    public function listSetting(): ProfileResponse //PROFIL LISTÁZÁSA
     {
-        $user = new User();
-        $userId = $user->id;
-        $stmt = $this->db->prepare("select * from profile WHERE id=:1");
-//        $stmt->execute();
+        $getUser = $this->getUser();
+        $getId = $getUser->id;
+        dd(json_decode($getId));
+        $token = $this->getToken();
+        $userId = $token->id;
+        $stmt = $this->db->prepare("select * from profile WHERE id=:id");
+        $stmt->execute(array(
+            "id" => $userId
+        ));
         $ProfileData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $profiles = [];
 
+
         $mapper = new Mapper();
         foreach ($ProfileData as $profile) {
-            $profiles[] = $mapper->classFromArray($profile, new ProfileResponse());
+            $profiles = $mapper->classFromArray($profile, new ProfileResponse());
         }
-        dd($user);
         return $profiles;
+
+
     }
 
 }

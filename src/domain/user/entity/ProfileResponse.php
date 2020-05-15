@@ -5,6 +5,7 @@ namespace Randi\domain\user\entity;
 
 class ProfileResponse
 {
+    public $id;
     public $username;
     public $address;
     public $height;

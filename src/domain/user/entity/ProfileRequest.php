@@ -6,6 +6,8 @@ namespace Randi\domain\user\entity;
 
 class ProfileRequest
 {
+    /** @var string */
+    private $id;
 
     /** @var string */
     private $username;
@@ -215,6 +217,22 @@ class ProfileRequest
     public function setStatus(int $status): void
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setId(string $id): void
+    {
+        $this->id = $id;
     }
 
 }
