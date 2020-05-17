@@ -51,10 +51,13 @@ class ProfileController extends BaseController
     /**
      * http://randi/profile/get
      */
-    public function getAction()
+    /**
+     * @param null|integer $id
+     */
+    public function getAction($id = null)
     {
         if ($this->hasRole(["admin", "user"])) {
-            $this->returnJson($this->profileService->listSetting());
+            $this->returnJson($this->profileService->listSetting($id));
         }
     }
 

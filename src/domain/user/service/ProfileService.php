@@ -25,12 +25,16 @@ class ProfileService extends BaseService
     /**
      * @return Profile
      */
-    public function listSetting(): Profile //PROFIL LISTÁZÁSA
+    /**
+     * @param null|integer $id
+     * @return Profile
+     */
+    public function listSetting($id): Profile //PROFIL LISTÁZÁSA
     {
 
         /** @var User $user */
         $user = $this->getUser();
-        $profileId = $user->profileId;
+        $profileId = isset($id) ? $id : $user->profileId;
         $this->log->debug("listSettings" . $profileId . " " . json_encode($user));
         $stmt = $this->db->prepare("select * from profile WHERE id=:profileId");
         $stmt->execute(array(
