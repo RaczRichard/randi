@@ -12,8 +12,8 @@ use Randi\domain\user\entity\LoginResponse;
 use Randi\domain\user\entity\RegisterRequest;
 use Randi\domain\user\entity\Token;
 use Randi\domain\user\entity\User;
-use Randi\modules\Mapper;
 use Randi\modules\JwtHandler;
+use Randi\modules\Mapper;
 
 
 class AuthService extends BaseService
@@ -55,7 +55,7 @@ class AuthService extends BaseService
 
         $stmt = $this->db->prepare("insert into profile (status) values (:status)");
         $stmt->execute([
-            'status' => 1,
+            'status' => 1
         ]);
 
         $profileId = $this->db->lastInsertId();

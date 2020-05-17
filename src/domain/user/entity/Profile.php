@@ -9,7 +9,8 @@ class Profile
     public $username;
     public $address;
     public $height;
-    public $weight;
+    public $physique;
+    public $gender;
     public $age;
     public $child;
     public $job;

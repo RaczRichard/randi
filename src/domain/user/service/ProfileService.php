@@ -6,11 +6,8 @@ namespace Randi\domain\user\service;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Randi\domain\base\service\BaseService;
-use Randi\domain\user\entity\ProfileRequest;
 use Randi\domain\user\entity\Profile;
-use Randi\domain\user\entity\Token;
 use Randi\domain\user\entity\User;
-use Randi\modules\JwtHandler;
 use Randi\modules\Mapper;
 
 
@@ -52,24 +49,37 @@ class ProfileService extends BaseService
      * @param Profile $profile
      * @return Profile
      */
-    public function changeSetting(Profile $profile): Profile //PROFILE UPDATE
+    public function changeSetting($profile): Profile //PROFILE UPDATE
     {
-        $stmt = $this->db->prepare("update profile set username =:username,address=:address,height=:height,weight=:weight,
-                                              age=:age,child=:child,job=:job,live=:live,looking=:looking,school=:school where id=:id");
+        $this->log->debug("change setting " . json_encode($profile));
+        $stmt = $this->db->prepare("update profile set 
+                                              username=:username,
+                                              address=:address,
+                                              height=:height,
+                                              physique=:physique,
+                                              age=:age,
+                                              child=:child,
+                                              job=:job,
+                                              live=:live,
+                                              looking=:looking,
+                                              school=:school,
+                                              gender=:gender 
+                                              where id=:id");
         $stmt->execute(array(
             "id" => $profile->id,
             "username" => $profile->username,
             "address" => $profile->address,
             "height" => $profile->height,
-            "weight" => $profile->weight,
+            "physique" => $profile->physique,
             "age" => $profile->age,
             "child" => $profile->child,
             "job" => $profile->job,
             "live" => $profile->live,
             "looking" => $profile->looking,
-            "school" => $profile->school
+            "school" => $profile->school,
+            "gender" => $profile->gender
         ));
-        $this->log->debug("changeSettings Profile adatok ");
+        return $profile;
 
     }
 }

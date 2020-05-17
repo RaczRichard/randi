@@ -34,7 +34,8 @@ class ProfileController extends BaseController
         $profile->username = RequestHandler::postParam('username') ?: '';
         $profile->address = RequestHandler::postParam('address') ?: '';
         $profile->height = RequestHandler::postParam('height') ?: '';
-        $profile->weight = RequestHandler::postParam('weight') ?: '';
+        $profile->physique = RequestHandler::postParam('physique') ?: '';
+        $profile->gender = RequestHandler::postParam('gender') ?: '';
         $profile->age = RequestHandler::postParam('age') ?: '';
         $profile->child = RequestHandler::postParam('child') ?: '';
         $profile->job = RequestHandler::postParam('job') ?: '';

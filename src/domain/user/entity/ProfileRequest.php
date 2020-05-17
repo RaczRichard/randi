@@ -13,13 +13,16 @@ class ProfileRequest
     private $username;
 
     /** @var string */
+    private $gender;
+
+    /** @var string */
     private $address;
 
     /** @var int */
     private $height;
 
-    /** @var int */
-    private $weight;
+    /** @var string */
+    private $physique;
 
     /** @var int */
     private $age;
@@ -89,22 +92,6 @@ class ProfileRequest
     public function setHeight(int $height): void
     {
         $this->height = $height;
-    }
-
-    /**
-     * @return int
-     */
-    public function getWeight(): int
-    {
-        return $this->weigth;
-    }
-
-    /**
-     * @param int $weight
-     */
-    public function setWeight(int $weight): void
-    {
-        $this->weight = $weight;
     }
 
     /**
@@ -233,6 +220,39 @@ class ProfileRequest
     public function setId(string $id): void
     {
         $this->id = $id;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getGender(): string
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param string $gender
+     */
+    public function setGender(string $gender): void
+    {
+        $this->gender = $gender;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhysique(): string
+    {
+        return $this->physique;
+    }
+
+    /**
+     * @param string $physique
+     */
+    public function setPhysique(string $physique): void
+    {
+        $this->physique = $physique;
     }
 
 }
