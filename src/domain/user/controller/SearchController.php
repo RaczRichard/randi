@@ -35,9 +35,6 @@ class SearchController extends BaseController
     {
         $_POST = json_decode(file_get_contents('php://input'), true);
         $name = RequestHandler::postParam("name");
-        /**
-         * csináld meg rendesen több paraméterrel!
-         */
         if ($this->hasRole(["admin", "user"])) {
             $this->returnJson($this->searchService->search($name));
         }

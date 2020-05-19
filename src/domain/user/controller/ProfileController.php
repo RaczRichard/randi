@@ -50,8 +50,6 @@ class ProfileController extends BaseController
 
     /**
      * http://randi/profile/get
-     */
-    /**
      * @param null|integer $id
      */
     public function getAction($id = null)

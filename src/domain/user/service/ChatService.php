@@ -12,8 +12,10 @@ namespace Randi\domain\user\service;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Randi\domain\base\service\BaseService;
+use Randi\domain\user\entity\ChatMsg;
 use Randi\domain\user\entity\Room;
 use Randi\domain\user\entity\RoomResponse;
+use Randi\domain\user\entity\UserMessage;
 use Randi\modules\Mapper;
 
 class ChatService extends BaseService
@@ -97,5 +99,50 @@ class ChatService extends BaseService
             $roomResponses[] = $roomResponse;
         }
         return $roomResponses;
+    }
+
+    /**
+     * @param int $roomId
+     * @return ChatMsg[]
+     */
+    public function getMassages($roomId): array
+    {
+        $stmt = $this->db->prepare("select * from chatmsg where roomId=:roomId order by time");
+        $stmt->execute([
+            "roomId" => $roomId
+        ]);
+
+        $messageDatas = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        /**
+         * @var ChatMsg[] $messages
+         */
+        $messages = [];
+        foreach ($messageDatas as $messageData) {
+            $messages[] = $this->jsonMapper->classFromArray($messageData, new ChatMsg());
+        }
+        return $messages;
+    }
+
+    /**
+     * @param UserMessage $userMessage
+     * @return void
+     */
+    public function sendMessage($userMessage)
+    {
+
+        $pId = $this->getUser()->profileId;
+
+        $chatMessage = new ChatMsg();
+        $chatMessage->msg = $userMessage->msg;
+        $chatMessage->roomId = $userMessage->roomId;
+        $chatMessage->pId = $pId;
+
+        $stmt = $this->db->prepare("insert into chatmsg (pId,msg,roomId) values (:pId,:msg,:roomId)");
+        $stmt->execute([
+            "pId" => $chatMessage->pId,
+            "roomId" => $chatMessage->roomId,
+            "msg" => $chatMessage->msg
+        ]);
     }
 }

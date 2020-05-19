@@ -7,6 +7,6 @@ namespace Randi\domain\user\entity;
 class LoginResponse
 {
     public $id;
-    public $name;
+    public $email;
     public $token;
 }

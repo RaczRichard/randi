@@ -52,23 +52,36 @@ class AuthService extends BaseService
     {
 
         $this->log->debug(json_encode($request));
-
+        //Profile fillelése
         $stmt = $this->db->prepare("insert into profile (status) values (:status)");
         $stmt->execute([
             'status' => 1
         ]);
 
-        $profileId = $this->db->lastInsertId();
-        $stmt = $this->db->prepare("insert into user (email, password, profileId) values (:email, :password, :profileId)");
+        $lastInsertId = $this->db->lastInsertId();
+        //user feltöltése
+        $stmt = $this->db->prepare("insert into user 
+                                              (email, password, profileId, status) 
+                                              values 
+                                              (:email, :password, :profileId,:status)");
         $success = $stmt->execute([
             "email" => $request->getEmail(),
             "password" => $request->getPassword(),
-            "profileId" => $profileId
+            "profileId" => $lastInsertId,
+            "status" => 1
+        ]);
+        //verifications feltöltése
+        $uuid = mt_rand(0, 0xffff);
+        $stmt = $this->db->prepare("insert into verification (userId, uuid) values (:userId, :uuid)");
+        $stmt->execute([
+            "userId" => $lastInsertId,
+            "uuid" => $uuid,
         ]);
 
         if (!$success) {
             $this->log->error("couldn't register user");
         }
+        return $uuid;
     }
 
     /**
@@ -87,7 +100,7 @@ class AuthService extends BaseService
         $userData = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if (isset($userData) && $userData) {
-            $this->log->debug(json_encode($userData));
+            $this->log->debug("userData debug" . json_encode($userData));
         } else {
             $this->log->error("invalid username and password!");
         }
@@ -100,15 +113,20 @@ class AuthService extends BaseService
         /** @var User $user */
         $user = $mapper->classFromArray($userData, new User());
         $token = new Token();
-        $token->name = $user->email;
+        $token->email = $user->email;
         $token->id = $user->id;
         $token->exp = time() + (3600);
         $jwt = $this->jwtHandler->generateJwt($token);
         $response = new LoginResponse();
         $response->id = $user->id;
-        $response->name = $user->email;
+        $response->email = $user->email;
         $response->token = $jwt;
         return $response;
     }
 
+
+    public function verification()
+    {
+
+    }
 }

@@ -6,7 +6,7 @@ namespace Randi\domain\user\entity;
 
 class Token
 {
-    public $name;
+    public $email;
     public $id;
     public $exp;
 }
