@@ -47,18 +47,20 @@ class AuthService extends BaseService
         return null;
     }
 
-
+    /**
+     * @param RegisterRequest $request
+     * @return int
+     */
     public function registerUser(RegisterRequest $request)
     {
 
-        $this->log->debug(json_encode($request));
         //Profile fillelése
         $stmt = $this->db->prepare("insert into profile (status) values (:status)");
         $stmt->execute([
             'status' => 1
         ]);
-
         $lastInsertId = $this->db->lastInsertId();
+
         //user feltöltése
         $stmt = $this->db->prepare("insert into user 
                                               (email, password, profileId, status) 
@@ -70,6 +72,7 @@ class AuthService extends BaseService
             "profileId" => $lastInsertId,
             "status" => 1
         ]);
+
         //verifications feltöltése
         $uuid = mt_rand(0, 0xffff);
         $stmt = $this->db->prepare("insert into verification (userId, uuid) values (:userId, :uuid)");
@@ -78,6 +81,17 @@ class AuthService extends BaseService
             "uuid" => $uuid,
         ]);
 
+        //mail küldés
+        $this->log->debug("verify: " . $uuid);
+        $subject = "Randi hitelesités";
+        $txt = "Regisztráció megerősitéséhez ide katt: " . $uuid;
+        $headers = "From: raczistvanrichard@gmail.com";
+        mail($request->getEmail(), $subject, $txt, $headers);
+        $this->log->debug("MAIL email értéke: " . $request->getEmail());
+        $this->log->debug("MAIL full: " . mail($request->getEmail(), $subject, $txt, $headers));
+        $this->log->debug(json_encode($request));
+
+        //ellenőrzés
         if (!$success) {
             $this->log->error("couldn't register user");
         }
@@ -128,5 +142,18 @@ class AuthService extends BaseService
     public function verification()
     {
 
+    }
+
+    /**
+     * @param LoginRequest $request
+     * @return LoginResponse
+     */
+    public function resetPass(LoginRequest $request): ?LoginResponse
+    {
+        $this->log->debug("reset email: " . $request->getEmail());
+        $stmt = $this->db->prepare("select * from user where email=:email");
+        $stmt->execute([
+            "email" => $request->getEmail(),
+        ]);
     }
 }

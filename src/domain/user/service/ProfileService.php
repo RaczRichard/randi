@@ -55,6 +55,8 @@ class ProfileService extends BaseService
      */
     public function changeSetting($profile): Profile //PROFILE UPDATE
     {
+        $picture = $this->base64_to_jpeg($profile->picture, "picture.jpg");
+//        $this->log->debug("kép decode:". $picture);
         $this->log->debug("change setting " . json_encode($profile));
         $stmt = $this->db->prepare("update profile set 
                                               username=:username,
@@ -67,7 +69,8 @@ class ProfileService extends BaseService
                                               live=:live,
                                               looking=:looking,
                                               school=:school,
-                                              gender=:gender 
+                                              gender=:gender,
+                                              picture=:picture,
                                               where id=:id");
         $stmt->execute(array(
             "id" => $profile->id,
@@ -81,7 +84,8 @@ class ProfileService extends BaseService
             "live" => $profile->live,
             "looking" => $profile->looking,
             "school" => $profile->school,
-            "gender" => $profile->gender
+            "gender" => $profile->gender,
+            "picture" => $picture,
         ));
         return $profile;
 

@@ -45,6 +45,9 @@ class ProfileRequest
     /** @var int */
     private $status;
 
+    /** @var string */
+    private $picture;
+
     /**
      * @return string
      */
@@ -253,6 +256,22 @@ class ProfileRequest
     public function setPhysique(string $physique): void
     {
         $this->physique = $physique;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPicture(): string
+    {
+        return $this->picture;
+    }
+
+    /**
+     * @param string $picture
+     */
+    public function setPicture(string $picture): void
+    {
+        $this->picture = $picture;
     }
 
 }

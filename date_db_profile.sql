@@ -1,0 +1,1 @@
+INSERT INTO `date-db`.profile (id, username, address, height, physique, age, child, job, live, looking, school, status, gender, picture) VALUES (1, '', '', 0, '', 0, '', '', '', '', '', 1, null, null);

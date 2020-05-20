@@ -8,7 +8,6 @@ use Monolog\Logger;
 use Randi\domain\base\controller\BaseController;
 use Randi\domain\user\entity\LoginRequest;
 use Randi\domain\user\entity\RegisterRequest;
-use Randi\domain\user\entity\Verification;
 use Randi\domain\user\service\validator\Validator;
 use Randi\modules\RequestHandler;
 
@@ -60,19 +59,11 @@ class AuthController extends BaseController
         $password = RequestHandler::postParam('password') ?: '';
 
         $request = new RegisterRequest();
-        $verification = new Verification();
-        $verify = $verification->uuid;
         $request->setEmail($email);
         $request->setPassword($password);
-        $this->log->debug("verify: " . $verify);
-        $subject = "Randi hitelesités";
-        $txt = "Regisztráció megerősitéséhez ide katt: " . $verify;
-        $headers = "From: raczistvanrichard@gmail.com";
+
         if(Validator::validateRegister($request)){
             $this->authService->registerUser($request);
-            mail($email, $subject, $txt, $headers);
-            $this->log->debug("MAIL email értéke: " . $email);
-            $this->log->debug("MAIL full: " . mail($email, $subject, $txt, $headers));
         }else{
             echo "register szar!";
         }
@@ -87,5 +78,17 @@ class AuthController extends BaseController
     {
         $_POST = json_decode(file_get_contents('php://input'), true);
         $this->returnJson($this->authService->verification($uuid));
+    }
+
+    /**
+     * http://randi/auth/reset
+     */
+    public function resetAction()
+    {
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        $email = RequestHandler::postParam('email') ?: '';
+        $request = new LoginRequest();
+        $request->setEmail($email);
+        $this->returnJson($this->authService->resetPass($request));
     }
 }

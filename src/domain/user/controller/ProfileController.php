@@ -43,6 +43,7 @@ class ProfileController extends BaseController
         $profile->looking = RequestHandler::postParam('looking') ?: '';
         $profile->school = RequestHandler::postParam('school') ?: '';
         $profile->status = RequestHandler::postParam('status') ?: '';
+        $profile->picture = RequestHandler::postParam('picture') ?: '';
         if ($this->hasRole(["admin", "user"])) {
             $this->returnJson($this->profileService->changeSetting($profile));
         }

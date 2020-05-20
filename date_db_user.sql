@@ -1,0 +1,1 @@
+INSERT INTO `date-db`.user (id, email, password, roleId, profileId, status) VALUES (1, 'ankeeel93@gmail.com', 'asd', 2, 1, 2);

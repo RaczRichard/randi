@@ -18,4 +18,5 @@ class Profile
     public $looking;
     public $school;
     public $status;
+    public $picture;
 }
