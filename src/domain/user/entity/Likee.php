@@ -1,12 +1,11 @@
 <?php
 
-
 namespace Randi\domain\user\entity;
 
 
-class Verification
+class Likee
 {
     public $id;
-    public $userId;
-    public $uuid;
+    public $liker;
+    public $liked;
 }

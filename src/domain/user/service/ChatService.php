@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Én
- * Date: 2020. 05. 17.
- * Time: 17:07
- */
 
 namespace Randi\domain\user\service;
 
@@ -126,7 +120,6 @@ class ChatService extends BaseService
 
     /**
      * @param UserMessage $userMessage
-     * @return void
      */
     public function sendMessage($userMessage)
     {

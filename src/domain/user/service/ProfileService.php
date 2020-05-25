@@ -41,6 +41,7 @@ class ProfileService extends BaseService
             "profileId" => $profileId
         ));
         $profileData = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $this->log->debug(json_encode($profileData));
         $this->log->debug("profileData " . json_encode($profileData));
         $mapper = new Mapper();
         /** @var Profile $profile */
@@ -53,11 +54,12 @@ class ProfileService extends BaseService
      * @param Profile $profile
      * @return Profile
      */
+
+
     public function changeSetting($profile): Profile //PROFILE UPDATE
     {
-        $picture = $this->base64_to_jpeg($profile->picture, "picture.jpg");
-//        $this->log->debug("kép decode:". $picture);
-        $this->log->debug("change setting " . json_encode($profile));
+        $this->log->debug("Change setting id: " . $profile->id . " username: " . $profile->username . " address: " . $profile->address . " height: " . $profile->height . " physique: " . $profile->physique . " age: " . $profile->age);
+        $this->log->debug("Change setting child: " . $profile->child . " job: " . $profile->job . " live: " . $profile->live . " looking: " . $profile->looking . " school: " . $profile->school . " gender: " . $profile->gender);
         $stmt = $this->db->prepare("update profile set 
                                               username=:username,
                                               address=:address,
@@ -70,7 +72,7 @@ class ProfileService extends BaseService
                                               looking=:looking,
                                               school=:school,
                                               gender=:gender,
-                                              picture=:picture,
+                                              picturePath=:picturePath
                                               where id=:id");
         $stmt->execute(array(
             "id" => $profile->id,
@@ -85,9 +87,25 @@ class ProfileService extends BaseService
             "looking" => $profile->looking,
             "school" => $profile->school,
             "gender" => $profile->gender,
-            "picture" => $picture,
+            "picturePath" => $profile->picturePath
         ));
         return $profile;
 
+    }
+
+    /**
+     * @param string $base64_string
+     * @param string $output_file
+     * @return string $path
+     */
+    public function base64_to_jpeg($base64_string, $output_file)
+    {
+        $data = explode(',', $base64_string);
+
+        $ifp = fopen("images/" . $output_file, 'wb');
+        fwrite($ifp, base64_decode($data[1]));
+        fclose($ifp);
+
+        return $output_file;
     }
 }

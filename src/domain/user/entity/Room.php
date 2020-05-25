@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Én
- * Date: 2020. 05. 17.
- * Time: 17:13
- */
+
 
 namespace Randi\domain\user\entity;
 

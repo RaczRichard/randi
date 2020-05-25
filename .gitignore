@@ -3,3 +3,4 @@ vendor/*
 .idea
 randi.log
 composer.lock
+images/*

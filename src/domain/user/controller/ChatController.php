@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Én
- * Date: 2020. 05. 17.
- * Time: 17:07
- */
+
 
 namespace Randi\domain\user\controller;
 
@@ -33,7 +28,6 @@ class ChatController extends BaseController
             if (!isset($pId2)) {
                 $this->returnJson("Nem okés!");
             }
-
             $this->returnJson($this->chatService->getRoomId($pId2));
         }
     }

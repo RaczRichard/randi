@@ -8,6 +8,7 @@ use Monolog\Logger;
 use Randi\domain\base\controller\BaseController;
 use Randi\domain\user\entity\LoginRequest;
 use Randi\domain\user\entity\RegisterRequest;
+use Randi\domain\user\entity\User;
 use Randi\domain\user\service\validator\Validator;
 use Randi\modules\RequestHandler;
 
@@ -18,7 +19,7 @@ class AuthController extends BaseController
     {
         parent::__construct();
         $this->log = new Logger('AuthController.php');
-        $this->log->pushHandler(new StreamHandler($GLOBALS['rootDir'].'/randi.log', Logger::DEBUG));
+        $this->log->pushHandler(new StreamHandler($GLOBALS['rootDir'] . '/randi.log', Logger::DEBUG));
     }
 
     /**
@@ -34,17 +35,17 @@ class AuthController extends BaseController
         $request->setEmail($email);
         $request->setPassword($password);
 
-        if(Validator::validateLogin($request)){
+        if (Validator::validateLogin($request)) {
             $response = $this->authService->login($request);
-            if($response){
+            if ($response) {
                 $this->returnJson($response);
-            }else{
+            } else {
                 http_response_code(401);
                 $error["message"] = "login failed!";
                 $this->returnJson($error);
             }
 
-        }else{
+        } else {
             echo "login szar!";
         }
     }
@@ -57,14 +58,15 @@ class AuthController extends BaseController
         $_POST = json_decode(file_get_contents('php://input'), true);
         $email = RequestHandler::postParam('email') ?: '';
         $password = RequestHandler::postParam('password') ?: '';
+        $passwordAgain = RequestHandler::postParam('passwordAgain') ?: '';
 
         $request = new RegisterRequest();
         $request->setEmail($email);
         $request->setPassword($password);
 
-        if(Validator::validateRegister($request)){
-            $this->authService->registerUser($request);
-        }else{
+        if (Validator::validateRegister($request)) {
+            $this->authService->registerUser($request, $passwordAgain);
+        } else {
             echo "register szar!";
         }
 
@@ -72,11 +74,11 @@ class AuthController extends BaseController
 
     /**
      * http://randi/auth/verification
-     * @param $uuid
+     * @param string $uuid
      */
-    public function verificationAction($uuid = null)
+    public function verificationAction($uuid)
     {
-        $_POST = json_decode(file_get_contents('php://input'), true);
+        $this->log->debug("uuid: " . $uuid);
         $this->returnJson($this->authService->verification($uuid));
     }
 
@@ -86,9 +88,28 @@ class AuthController extends BaseController
     public function resetAction()
     {
         $_POST = json_decode(file_get_contents('php://input'), true);
+        $email = new User();
+        $email->email = RequestHandler::postParam('email') ?: '';
+        $this->returnJson($this->authService->resetPass($email));
+    }
+
+    /**
+     * http://randi/auth/passwordChange
+     */
+    public function passwordChangeAction()
+    {
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        $old = RequestHandler::postParam('old') ?: '';
+        $newPass = RequestHandler::postParam('newPass') ?: '';
+        $again = RequestHandler::postParam('again') ?: '';
+
+        $this->returnJson($this->authService->changePassword($old, $newPass, $again));
+    }
+
+    public function emailChangeAction()
+    {
+        $_POST = json_decode(file_get_contents('php://input'), true);
         $email = RequestHandler::postParam('email') ?: '';
-        $request = new LoginRequest();
-        $request->setEmail($email);
-        $this->returnJson($this->authService->resetPass($request));
+        $this->returnJson($this->authService->changeEmail($email));
     }
 }
